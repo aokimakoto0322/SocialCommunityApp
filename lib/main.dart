@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:socialcommunityapp/viewparts/appmenu/appbarlistview.dart';
+import 'package:socialcommunityapp/Repository/Api/main_recently_recruiment.dart';
+import 'package:socialcommunityapp/UseCase/main_usecase.dart';
+import 'package:socialcommunityapp/ValueObject/main/main_ValueObject.dart';
+import 'package:socialcommunityapp/viewparts/main/appmenu/appBarListView.dart';
+import 'package:socialcommunityapp/viewparts/main/sportScrollView.dart';
+import 'package:socialcommunityapp/viewparts/main/recentlyRecruitmentView.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,13 +21,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: MyHomePage(
+        mainUseCase: MainUseCase(
+          RecentlyRecruitment(),
+          MainValueObject()
+        ),
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  MyHomePage({super.key, required this.mainUseCase});
+
+  var mainUseCase;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -37,14 +49,13 @@ class _MyHomePageState extends State<MyHomePage> {
         //viewparts/appmenu/appbarlistview.dart
         child: AppBarListView()
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Text',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
+            // viewparts/main/recentlyRecruitmentView.dart
+            RecentlyRecruitmentView(widget.mainUseCase.create()),
+            // viewparts/main/sportsscrollview.dart
+            SportsScrollView()
           ],
         ),
       )
